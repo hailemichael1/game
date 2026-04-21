@@ -46,6 +46,21 @@ const GameManager = (() => {
     const tdPanel = document.getElementById('td-panel');
     tdPanel.style.display = currentGame === 'tower' ? 'flex' : 'none';
 
+    // Show/hide mobile controls (only on touch devices)
+    const isTouchDevice = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
+    const mobControls = document.getElementById('mobile-controls');
+    const mobJump  = document.getElementById('mob-jump');
+    const mobShoot = document.getElementById('mob-shoot');
+    mobJump.classList.remove('show');
+    mobShoot.classList.remove('show');
+    if (isTouchDevice) {
+      mobControls.classList.add('visible');
+      if (currentGame === 'runner')  mobJump.classList.add('show');
+      if (currentGame === 'shooter') mobShoot.classList.add('show');
+    } else {
+      mobControls.classList.remove('visible');
+    }
+
     showScreen('screen-game');
 
     // Size canvas
@@ -109,6 +124,7 @@ const GameManager = (() => {
       activeModule = null;
     }
     document.getElementById('td-panel').style.display = 'none';
+    document.getElementById('mobile-controls').classList.remove('visible');
     showMenu();
   }
 
@@ -124,6 +140,22 @@ const GameManager = (() => {
 function selectGame(type) { GameManager.selectGame(type); }
 function replayGame()      { GameManager.replayGame(); }
 function goToMenu()        { GameManager.goToMenu(); }
+
+// ── Mobile button handlers ────────────────────────────────────
+function mobileJump(e) {
+  e.preventDefault();
+  // Simulate Space keydown for the runner
+  const ev = new KeyboardEvent('keydown', { code: 'Space', bubbles: true });
+  window.dispatchEvent(ev);
+  setTimeout(() => window.dispatchEvent(new KeyboardEvent('keyup', { code: 'Space', bubbles: true })), 80);
+}
+function mobileShoot(e) {
+  e.preventDefault();
+  // Hold Space for shooter
+  const ev = new KeyboardEvent('keydown', { code: 'Space', bubbles: true });
+  window.dispatchEvent(ev);
+  setTimeout(() => window.dispatchEvent(new KeyboardEvent('keyup', { code: 'Space', bubbles: true })), 150);
+}
 
 // ── Boot ──────────────────────────────────────────────────────
 window.addEventListener('DOMContentLoaded', () => GameManager.init());
