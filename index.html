@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Game Arcade</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ===== MAIN MENU ===== -->
+  <div id="screen-menu" class="screen active">
+    <div class="menu-bg"></div>
+    <div class="menu-content">
+      <h1 class="title">🎮 ARCADE</h1>
+      <p class="subtitle">Choose your game</p>
+      <div class="game-cards">
+
+        <div class="card" id="card-shooter" onclick="selectGame('shooter')">
+          <div class="card-icon">🚀</div>
+          <h2>Space Shooter</h2>
+          <p>Blast enemies, dodge bullets, survive boss waves</p>
+          <div class="card-controls">WASD / Arrows + Space</div>
+        </div>
+
+        <div class="card" id="card-tower" onclick="selectGame('tower')">
+          <div class="card-icon">🏰</div>
+          <h2>Tower Defense</h2>
+          <p>Place towers, stop the enemy waves</p>
+          <div class="card-controls">Mouse Click</div>
+        </div>
+
+        <div class="card" id="card-runner" onclick="selectGame('runner')">
+          <div class="card-icon">🏃</div>
+          <h2>Endless Runner</h2>
+          <p>Jump over obstacles, survive as long as you can</p>
+          <div class="card-controls">Space / Tap to Jump</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== GAME SCREEN ===== -->
+  <div id="screen-game" class="screen">
+    <div id="hud">
+      <button id="btn-back" onclick="goToMenu()">← Menu</button>
+      <span id="hud-title"></span>
+      <span id="hud-score">Score: 0</span>
+    </div>
+    <canvas id="gameCanvas"></canvas>
+
+    <!-- Tower Defense UI panel -->
+    <div id="td-panel" style="display:none;">
+      <div class="td-tower-btn active" id="td-btn-basic" onclick="tdSelectTower('basic')">
+        🗼 Basic<br><small>Cost: 50</small>
+      </div>
+      <div class="td-tower-btn" id="td-btn-sniper" onclick="tdSelectTower('sniper')">
+        🎯 Sniper<br><small>Cost: 100</small>
+      </div>
+      <div class="td-tower-btn" id="td-btn-splash" onclick="tdSelectTower('splash')">
+        💥 Splash<br><small>Cost: 150</small>
+      </div>
+      <div id="td-gold">💰 Gold: 200</div>
+      <div id="td-lives">❤️ Lives: 20</div>
+      <div id="td-wave">Wave: 1</div>
+    </div>
+  </div>
+
+  <!-- ===== END SCREEN ===== -->
+  <div id="screen-end" class="screen">
+    <div class="end-content">
+      <div id="end-icon">💀</div>
+      <h1 id="end-title">Game Over</h1>
+      <p id="end-score"></p>
+      <p id="end-best"></p>
+      <div class="end-buttons">
+        <button class="btn-primary" onclick="replayGame()">▶ Play Again</button>
+        <button class="btn-secondary" onclick="goToMenu()">🏠 Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/utils/audio.js"></script>
+  <script src="js/utils/input.js"></script>
+  <script src="js/games/spaceshooter.js"></script>
+  <script src="js/games/towerdefense.js"></script>
+  <script src="js/games/endlessrunner.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
