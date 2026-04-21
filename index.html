@@ -54,10 +54,8 @@
 
     <!-- Mobile controls overlay (shown only for touch devices) -->
     <div id="mobile-controls">
-      <!-- Runner: jump button -->
-      <button id="mob-jump" class="mob-btn" ontouchstart="mobileJump(event)">⬆ JUMP</button>
-      <!-- Shooter: shoot button -->
-      <button id="mob-shoot" class="mob-btn" ontouchstart="mobileShoot(event)">🔥 FIRE</button>
+      <button id="mob-jump"  class="mob-btn" ontouchstart="event.preventDefault(); window._triggerMobileJump && _triggerMobileJump();">⬆ JUMP</button>
+      <button id="mob-shoot" class="mob-btn" ontouchstart="event.preventDefault(); window._triggerMobileJump && _triggerMobileJump();">🔥 FIRE</button>
     </div>
 
     <!-- Tower Defense UI panel -->

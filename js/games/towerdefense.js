@@ -38,9 +38,16 @@ const TowerDefense = (() => {
   function init(c) {
     canvas = c;
     ctx = canvas.getContext('2d');
+    Input.attachTouch();
     resize();
     window.addEventListener('resize', resize);
     canvas.addEventListener('click', onCanvasClick);
+    // Touch placement
+    canvas.addEventListener('touchend', e => {
+      e.preventDefault();
+      const t = e.changedTouches[0];
+      onCanvasClick({ clientX: t.clientX, clientY: t.clientY });
+    }, { passive: false });
     reset();
     Audio.startMusic('tower');
     lastTime = performance.now();
@@ -48,12 +55,15 @@ const TowerDefense = (() => {
   }
 
   function resize() {
-    W = canvas.width  = canvas.offsetWidth;
-    H = canvas.height = canvas.offsetHeight;
-    // Adjust for TD panel width
     const panelW = window.innerWidth <= 600 ? 80 : 110;
-    W = W - panelW;
-    canvas.style.width = W + 'px';
+    const fullW = canvas.offsetWidth  || window.innerWidth;
+    const fullH = canvas.offsetHeight || (window.innerHeight - 50);
+    W = fullW - panelW;
+    H = fullH;
+    canvas.width  = W;
+    canvas.height = H;
+    canvas.style.width  = W + 'px';
+    canvas.style.height = H + 'px';
 
     CELL = Math.floor(Math.min(W / 20, H / 14));
     COLS = Math.floor(W / CELL);
@@ -147,6 +157,7 @@ const TowerDefense = (() => {
     checkWaveEnd();
     updateTDPanel();
     updateHUD();
+    Input.flush();
   }
 
   function spawnEnemies(dt) {
@@ -532,7 +543,8 @@ const TowerDefense = (() => {
     window.removeEventListener('resize', resize);
     canvas.removeEventListener('click', onCanvasClick);
     Audio.stopMusic();
-    canvas.style.width = '';
+    canvas.style.width  = '';
+    canvas.style.height = '';
   }
 
   return { init, destroy, selectTower };
