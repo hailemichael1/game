@@ -30,7 +30,7 @@ const GameManager = (() => {
     if (activeModule && activeModule.destroy) activeModule.destroy();
     activeModule = null;
 
-    const titles = { shooter: '🚀 Space Shooter', tower: '🏰 Tower Defense', runner: '🏃 Endless Runner' };
+    const titles = { shooter: '🚀 Space Shooter', tower: '🏰 Tower Defense', runner: '🏃 Endless Runner', moto: '🏍️ Moto Racer' };
     document.getElementById('hud-title').textContent = titles[currentGame] || '';
     document.getElementById('hud-score').textContent = 'Score: 0';
 
@@ -74,6 +74,9 @@ const GameManager = (() => {
         } else if (currentGame === 'runner') {
           activeModule = EndlessRunner;
           EndlessRunner.init(canvas);
+        } else if (currentGame === 'moto') {
+          activeModule = MotoRacer;
+          MotoRacer.init(canvas);
         }
       });
     });
@@ -86,8 +89,8 @@ const GameManager = (() => {
       bestScores[currentGame] = score;
       localStorage.setItem('arcadeBest', JSON.stringify(bestScores));
     }
-    const icons  = { shooter:'💥', tower:'🏰', runner:'💀' };
-    const titles = { shooter:'Mission Failed', tower:'Base Destroyed', runner:'Game Over' };
+    const icons  = { shooter:'💥', tower:'🏰', runner:'💀', moto:'🏁' };
+    const titles = { shooter:'Mission Failed', tower:'Base Destroyed', runner:'Game Over', moto:'Race Over' };
     document.getElementById('end-icon').textContent  = icons[currentGame]  || '💀';
     document.getElementById('end-title').textContent = titles[currentGame] || 'Game Over';
     document.getElementById('end-score').textContent = `Score: ${score.toLocaleString()}`;
