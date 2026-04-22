@@ -23,7 +23,23 @@ const GameManager = (() => {
     Audio.init(); // ensure AudioContext is created on this gesture
     Audio.sfx.menuClick();
     currentGame = type;
+    attemptMobileFullscreen(type);
     startGame();
+  }
+
+  function attemptMobileFullscreen(type) {
+    const isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
+    if (!isTouch) return;
+
+    const el = document.getElementById('screen-game') || document.documentElement;
+    if (!document.fullscreenElement && el && el.requestFullscreen) {
+      el.requestFullscreen().catch(() => { /* ignore */ });
+    }
+
+    // Lock to landscape for racing (best on phones). Safe no-op where unsupported.
+    if (type === 'moto' && screen.orientation && typeof screen.orientation.lock === 'function') {
+      screen.orientation.lock('landscape').catch(() => { /* ignore */ });
+    }
   }
 
   function startGame() {
@@ -75,8 +91,8 @@ const GameManager = (() => {
           activeModule = EndlessRunner;
           EndlessRunner.init(canvas);
         } else if (currentGame === 'moto') {
-          activeModule = MotoRacer;
-          MotoRacer.init(canvas);
+          activeModule = CyberRacer;
+          CyberRacer.init(canvas);
         }
       });
     });
@@ -113,6 +129,12 @@ const GameManager = (() => {
     if (activeModule && activeModule.destroy) { activeModule.destroy(); activeModule = null; }
     document.getElementById('td-panel').style.display = 'none';
     document.getElementById('mobile-controls').classList.remove('visible');
+    if (screen.orientation && typeof screen.orientation.unlock === 'function') {
+      try { screen.orientation.unlock(); } catch {}
+    }
+    if (document.fullscreenElement && document.exitFullscreen) {
+      document.exitFullscreen().catch(() => { /* ignore */ });
+    }
     showMenu();
   }
 
